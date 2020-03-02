@@ -1,0 +1,40 @@
+14:59:31.303 [main] INFO  c.l.moo.tool.util.UpgradeUtil :98 - 平滑升级开始
+14:59:31.652 [main] ERROR c.l.moo.tool.util.UpgradeUtil :103 - 执行平滑升级时先执行db_init.sql操作失败
+org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (table t_favorite_color_list already exists)
+	at org.sqlite.core.DB.newSQLException(DB.java:941)
+	at org.sqlite.core.DB.newSQLException(DB.java:953)
+	at org.sqlite.core.DB.throwex(DB.java:918)
+	at org.sqlite.core.NativeDB._exec_utf8(Native Method)
+	at org.sqlite.core.NativeDB._exec(NativeDB.java:94)
+	at org.sqlite.jdbc3.JDBC3Statement.executeUpdate(JDBC3Statement.java:109)
+	at com.luoboduner.moo.tool.util.MybatisUtil.executeSql(MybatisUtil.java:106)
+	at com.luoboduner.moo.tool.util.MybatisUtil.initDbFile(MybatisUtil.java:83)
+	at com.luoboduner.moo.tool.util.UpgradeUtil.smoothUpgrade(UpgradeUtil.java:101)
+	at com.luoboduner.moo.tool.App.main(App.java:52)
+14:59:31.662 [main] INFO  com.luoboduner.moo.tool.util.UIUtil :47 - screen dpi:96,width:1920.0,height:1080.0
+15:07:54.158 [main] INFO  c.l.moo.tool.util.UpgradeUtil :98 - 平滑升级开始
+15:07:54.494 [main] ERROR c.l.moo.tool.util.UpgradeUtil :103 - 执行平滑升级时先执行db_init.sql操作失败
+org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (table t_favorite_color_list already exists)
+	at org.sqlite.core.DB.newSQLException(DB.java:941)
+	at org.sqlite.core.DB.newSQLException(DB.java:953)
+	at org.sqlite.core.DB.throwex(DB.java:918)
+	at org.sqlite.core.NativeDB._exec_utf8(Native Method)
+	at org.sqlite.core.NativeDB._exec(NativeDB.java:94)
+	at org.sqlite.jdbc3.JDBC3Statement.executeUpdate(JDBC3Statement.java:109)
+	at com.luoboduner.moo.tool.util.MybatisUtil.executeSql(MybatisUtil.java:106)
+	at com.luoboduner.moo.tool.util.MybatisUtil.initDbFile(MybatisUtil.java:83)
+	at com.luoboduner.moo.tool.util.UpgradeUtil.smoothUpgrade(UpgradeUtil.java:101)
+	at com.luoboduner.moo.tool.App.main(App.java:52)
+15:10:52.117 [main] INFO  c.l.moo.tool.util.UpgradeUtil :98 - 平滑升级开始
+15:10:52.495 [main] ERROR c.l.moo.tool.util.UpgradeUtil :103 - 执行平滑升级时先执行db_init.sql操作失败
+org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (table t_favorite_color_list already exists)
+	at org.sqlite.core.DB.newSQLException(DB.java:941)
+	at org.sqlite.core.DB.newSQLException(DB.java:953)
+	at org.sqlite.core.DB.throwex(DB.java:918)
+	at org.sqlite.core.NativeDB._exec_utf8(Native Method)
+	at org.sqlite.core.NativeDB._exec(NativeDB.java:94)
+	at org.sqlite.jdbc3.JDBC3Statement.executeUpdate(JDBC3Statement.java:109)
+	at com.luoboduner.moo.tool.util.MybatisUtil.executeSql(MybatisUtil.java:106)
+	at com.luoboduner.moo.tool.util.MybatisUtil.initDbFile(MybatisUtil.java:83)
+	at com.luoboduner.moo.tool.util.UpgradeUtil.smoothUpgrade(UpgradeUtil.java:101)
+	at com.luoboduner.moo.tool.App.main(App.java:52)

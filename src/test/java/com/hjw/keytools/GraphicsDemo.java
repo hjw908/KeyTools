@@ -19,8 +19,8 @@ public class GraphicsDemo{
     //静态内部类
     public static class MyFrame extends JFrame{
         public static final String TITLE = "JAVA 绘图";
-        public static final int WIDTH = 330;
-        public static final int HEIGHT = 300;
+        public static final int WIDTH = 800;
+        public static final int HEIGHT = 800;
 
         public MyFrame(){
             super();
@@ -60,6 +60,15 @@ public class GraphicsDemo{
 //            drawArc(g);
 //            drawStr(g);
             drawImage(g);
+//            List<Person> personList = PersonPool.getInstance().getPersonList();
+//            drawPersonOval(g);
+        }
+
+
+        private void drawPersonOval(Graphics g){
+            myFrame.setTitle("绘制动态点");
+            Graphics2D graphics2D = (Graphics2D) g.create();
+            graphics2D.fillOval(200,33,5,5);
         }
 
         private void drawline(Graphics g) {
