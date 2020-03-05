@@ -58,6 +58,13 @@
       <version>1.11.2</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.62</version>
+    </dependency>
+
+
     <!-- 文件下载 -->
     <dependency>
       <groupId>commons-io</groupId>

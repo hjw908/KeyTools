@@ -2,209 +2,222 @@ package com.hjw.keytools.utils;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HttpClientUtil {
-    public static CloseableHttpClient httpClient;
 
-    public static CloseableHttpResponse response;
-
-
-
-    public static InputStream httpclientGet(String url) throws IOException {
+    /**
+     * 使用HttpClient发送get的请求
+     * httpGetMethond
+     *
+     * @param url
+     * @return 返回请求回来的String内容
+     * @throws IOException
+     */
+    public static String httpGetMethond(String url) {
+        String respondContent = null;
+        CloseableHttpResponse response = null;
         InputStream inputStream = null;
-        //创建默认的客户端
-        httpClient = HttpClients.createDefault();
-
-        //创建get请求实例
-        HttpGet httpGet = new HttpGet(url);
-        //设置头信息
-        httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        httpGet.setHeader("Accept-Encoding", "gzip, deflate, br");
-        httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.9");
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36");
-        httpGet.setHeader("Cookie", "__cfduid=dadc17b7109006f70d6b6af53606ad9dd1582182429; _ga=GA1.2.581510899.1582182461; _gid=GA1.2.1278217550.1582269105");
-        httpGet.setHeader("Connection", "keep-alive");
-
+        HttpEntity httpEntity = null;
+        CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
-            //执行get后，响应体
+            HttpGet httpGet = new HttpGet(url);
+            setGetHead(httpGet, getHeaderHashMap());
+            RequestConfig config = RequestConfig.custom()
+                    //设置连接超时时间(单位毫秒)
+                    .setConnectTimeout(5000)
+                    //设置请求超时时间(单位毫秒)
+                    .setConnectionRequestTimeout(5000)
+                    //socket读写超时时间(单位毫秒)
+                    .setSocketTimeout(5000)
+                    //设置是否允许重定向(默认为true)
+                    .setRedirectsEnabled(true).build();
+            httpGet.setConfig(config);
+
             response = httpClient.execute(httpGet);
+
             int statusCode = response.getStatusLine().getStatusCode();
             Header[] allHeader = response.getAllHeaders();
             System.out.println("statusCode: " + statusCode);
             for (int i = 0; i < allHeader.length; i++) {
                 System.out.println("allHeader: " + allHeader[i]);
             }
-            //获取消息实体
-            HttpEntity httpEntity = response.getEntity();
-
-            if (httpEntity != null) {
-//            System.out.println(EntityUtils.toString(httpEntity));
-//                EntityUtils.toByteArray(httpEntity);
-                inputStream = httpEntity.getContent();
-//                byte[] btImg = readStream(inputStream);
-                return inputStream;
-
-//            InputStreamReader streamReader = new InputStreamReader(inputStream);
-//            int line = 0;
-//            line = streamReader.read();
-//            while(line != -1){
-//                System.out.println((char)line);
-//
-//                    line = streamReader.read();
+            httpEntity = response.getEntity();
+            inputStream = new BufferedInputStream(httpEntity.getContent());
+//            inputStream = response.getEntity().getContent();
+            byte[] buffer = new byte[2024];
+            int currentByteReadCount = 0;
+            long totalContactsCount = -1;
+            int readContactsCount = 0;
+            StringBuilder strbuf = new StringBuilder();
+            while ((currentByteReadCount = inputStream.read(buffer)) != -1) {
+                String readData = new String(buffer, 0, currentByteReadCount, "UTF-8");
+                strbuf.append(readData);
+//                if (readData.indexOf("}~{") >= 0) {
+//                    readContactsCount++;
 //                }
             }
-
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return inputStream;
-    }
-
-
-    /**
-     * 从网上抓取图片内容
-     * 对一张图片作抓取
-     * 如果有多张图片可以for
-     */
-    public static void getImages(String url,String fileName,String picPath) throws Exception {
-
-        InputStream inputStream = httpclientGet(url);
-        byte[] btImg = readStream(inputStream);
-
-        if (null != btImg && btImg.length > 0) {
-            System.out.println("读取到：" + btImg.length + " 字节");
-            writeToDisk(btImg, fileName,picPath);
-        } else {
-            System.err.println("没有从该连接获得内容");
-        }
-        closeResource();
-    }
-
-
-
-    /**
-     * 将图片写入到磁盘
-     *
-     * @param img      图片数据流
-     * @param fileName 文件保存时的名称
-     */
-    public static void writeToDisk(byte[] img, String fileName,String picPath) {
-        try {
-            File file = new File(picPath + File.separator + fileName);
-            FileOutputStream fops = new FileOutputStream(file);
-            fops.write(img);
-            fops.flush();
-            fops.close();
-            System.out.println("图片已经写入到" + picPath + "下");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * 从输入流中获取数据写到内存里
-     *
-     * @param inStream 输入流
-     * @return
-     * @throws Exception
-     */
-    public static byte[] readStream(InputStream inStream) throws Exception {
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        while ((len = inStream.read(buffer)) != -1) {
-            outStream.write(buffer, 0, len);
-
-        }
-        inStream.close();
-        return outStream.toByteArray();
-    }
-
-    public static void reptilePic(String url) {
-        InputStream inputStream = null;
-        HttpEntity entity = null;
-
-        //创建默认的客户端
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        //创建get请求实例
-        HttpGet httpGet = new HttpGet(url);
-        //设置头信息
-        httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        httpGet.setHeader("Accept-Encoding", "gzip, deflate, br");
-        httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.9");
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36");
-        httpGet.setHeader("Cookie", "__cfduid=dadc17b7109006f70d6b6af53606ad9dd1582182429; _ga=GA1.2.581510899.1582182461; _gid=GA1.2.1278217550.1582269105");
-        httpGet.setHeader("Connection", "keep-alive");
-        CloseableHttpResponse response = null;
-        try {
-            response = httpClient.execute(httpGet);
-            entity = response.getEntity();
-
-
-            // 获取返回实体
-            String content = null;
-
-            content = EntityUtils.toString(entity, "utf-8");
-//            System.out.println(content);
-
-            // 解析网页 得到文档对象
-            Document doc = Jsoup.parse(content);
-            Elements elements = doc.select("img");
-            Elements ee = doc.getElementsByAttribute("src");
-            for (Element e : ee) {
-                String obj = e.attr("src");
-
-                System.out.println("haha: "+obj);
-            }
-
+            respondContent = strbuf.toString();
+            System.out.println(statusCode);
+            System.out.println(respondContent);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+
+            //EntityUtils.consume()其功能就是关闭HttpEntity是的流，如果手动关闭了InputStream也可以不调用这个方法
+            closeResource(httpClient, response, inputStream, httpEntity);
+        }
+        return respondContent;
+    }
+
+    public static void closeResource(CloseableHttpClient httpClient, CloseableHttpResponse response, InputStream inputStream, HttpEntity httpEntity) {
+        if (inputStream != null) {
             try {
-                httpClient.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (httpEntity != null) {
+            try {
+                EntityUtils.consume(httpEntity);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (response != null) {
+            try {
                 response.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
+        if (httpClient != null) {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
 
+    public static String httpPostMethod(String url, Map<String, String> headerMap, Map<String, String> paramsMap) {
+        String respondContent = null;
+        InputStream inputStream = null;
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost();
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(50000)
+                .setConnectionRequestTimeout(50000)
+                .setSocketTimeout(50000)
+                .setRedirectsEnabled(true).build();
 
-    public static void closeResource() throws IOException {
-        if(httpClient!=null){
-            httpClient.close();
+        httpPost.setConfig(config);
+        setPostHead(httpPost, headerMap);
+        setPostParams(httpPost, paramsMap);
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpPost);
+            HttpEntity httpEntity = response.getEntity();
+//            inputStream = response.getEntity().getContent();
+            inputStream = httpEntity.getContent();
+            int i = 0;
+            byte[] buffer = new byte[1024];
+            StringBuffer sbf = new StringBuffer();
+            while ((i = inputStream.read(buffer)) != -1) {
+                sbf.append(new String(buffer, 0, i, "UTF-8"));
+            }
+            respondContent = sbf.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+//            closeResource(httpClient, response, inputStream,httpEntity);
         }
-        if(response != null){
-            response.close();
-        }
-
+        return respondContent;
     }
 
-    public static void main(String[] args) throws Exception {
-//        HttpClientUtil.httpclientGet("https://via.placeholder.com/780x200");
-//        getImages("https://via.placeholder.com/780x200");
-//        reptilePic("https://blog.csdn.net/sinat_32238399/article/details/81389899");
+    public static HashMap<String, String> getHeaderHashMap() {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+        hashMap.put("Accept-Encoding", "gzip, deflate, br");
+        hashMap.put("Accept-Language", "zh-CN,zh;q=0.9");
+        hashMap.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36");
+        hashMap.put("Cookie", "__cfduid=dadc17b7109006f70d6b6af53606ad9dd1582182429; _ga=GA1.2.581510899.1582182461; _gid=GA1.2.1278217550.1582269105");
+        hashMap.put("Connection", "keep-alive");
+
+        return hashMap;
+    }
+
+    /**
+     * 设置get请求的头信息
+     *
+     * @param httpGet
+     * @param map
+     */
+    public static void setGetHead(HttpGet httpGet, Map<String, String> map) {
+        if (map != null && map.size() > 0) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                httpGet.addHeader(key, value);
+            }
+        }
+    }
+
+    /**
+     * 设置post请求的头信息
+     *
+     * @param httpPost
+     * @param headerMap
+     */
+    public static void setPostHead(HttpPost httpPost, Map<String, String> headerMap) {
+        if (headerMap != null && headerMap.size() > 0) {
+            for (Map.Entry<String, String> entry : headerMap.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                httpPost.setHeader(key, value);
+            }
+        }
+    }
+
+    public static void setPostParams(HttpPost httpPost, Map<String, String> paramsMap) {
+        if (paramsMap != null && paramsMap.size() > 0) {
+            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+            for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                nvps.add(new BasicNameValuePair(key, value));
+            }
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String preurl = "https://restapi.amap.com/v3/geocode/geo?";
+        //您的key&address=北京市朝阳区阜通东大街6号&city=北京
+        String param = "key=" + "0f06a966f194c8f185cbcec77228286f" + "&address=深圳市福田区侨香路国华大厦4G&city=深圳";
+        HttpClientUtil.httpGetMethond(preurl + param);
     }
 }

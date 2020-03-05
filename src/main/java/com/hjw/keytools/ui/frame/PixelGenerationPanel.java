@@ -1,9 +1,8 @@
 package com.hjw.keytools.ui.frame;
 
 import com.hjw.keytools.ui.UiConstants;
-import com.hjw.keytools.utils.ConsoleTextArea;
 import com.hjw.keytools.utils.FileUtils;
-import com.hjw.keytools.utils.HttpClientUtil;
+import com.hjw.keytools.utils.PixelHttpClientUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -137,8 +135,8 @@ public class PixelGenerationPanel {
         picPathPanel.add(openBut);
 
         JPanel textAreaJpanel =new JPanel(new FlowLayout(FlowLayout.CENTER));
-//        JTextArea jTextArea = new JTextArea(10,75);
-        ConsoleTextArea jTextArea = new ConsoleTextArea();
+        JTextArea jTextArea = new JTextArea(10,75);
+//        ConsoleTextArea jTextArea = new ConsoleTextArea();
         jTextArea.setLineWrap(true);
         //设置组合边界
         Border titleBorder = BorderFactory.createTitledBorder("Console");
@@ -220,7 +218,7 @@ public class PixelGenerationPanel {
                         }
 
                         try {
-                            HttpClientUtil.getImages(url, fileName,picPath);
+                            PixelHttpClientUtil.getImages(url, fileName,picPath);
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("生成图片失败");

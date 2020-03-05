@@ -91,6 +91,10 @@ public class MainFrame extends JFrame {
                     case UiConstants.FUN_6: {
                         break;
                     }
+
+                    case UiConstants.FUN_7: {
+                        break;
+                    }
                 }
             }
         });
