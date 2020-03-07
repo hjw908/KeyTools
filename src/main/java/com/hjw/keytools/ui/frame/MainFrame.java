@@ -26,6 +26,10 @@ public class MainFrame extends JFrame {
     JPanel pixelContentPanel;
     QRCodePanel qrCodePanel;
     JPanel qrCodeContentPanel;
+    JSONFormatJPanel jsonFormatJPanel;
+    JPanel jsonformatContentPanel;
+    PersonInfoPanel personInfoPanel;
+    JPanel personInfoContentPanel;
 
     public MainFrame() throws Exception {
         super();
@@ -39,7 +43,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("keyTools");
         setIconImage(new ImageIcon(MainFrame.class.getResource("/keytool_icon.png")).getImage());
-        setSize(new Dimension(1100, 600));//675
+        setSize(new Dimension(1110, 600));//675
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -78,9 +82,17 @@ public class MainFrame extends JFrame {
                         break;
                     }
                     case UiConstants.FUN_3: {
+                        contentJpanel.removeAll();
+                        contentJpanel.add(jsonformatContentPanel);
+                        repaint();
+                        revalidate();
                         break;
                     }
                     case UiConstants.FUN_4: {
+                        contentJpanel.removeAll();
+                        contentJpanel.add(personInfoContentPanel);
+                        repaint();
+                        revalidate();
                         break;
                     }
 
@@ -92,9 +104,7 @@ public class MainFrame extends JFrame {
                         break;
                     }
 
-                    case UiConstants.FUN_7: {
-                        break;
-                    }
+
                 }
             }
         });
@@ -121,6 +131,12 @@ public class MainFrame extends JFrame {
 
         qrCodePanel = QRCodePanel.getInstance(MainFrame.this);
         qrCodeContentPanel = qrCodePanel.getQRCodeContentPanel();
+
+        jsonFormatJPanel = JSONFormatJPanel.getInstance(this);
+        jsonformatContentPanel = jsonFormatJPanel.getJsonFormatcontenJPanel();
+
+        personInfoPanel = PersonInfoPanel.getInstance(this);
+        personInfoContentPanel = personInfoPanel.getPersonInfoContentPanel();
 
         //首次运行程序的时候，contentPanel默认展示第一个list的内容
         if (jList.getSelectedIndex() == 0) {

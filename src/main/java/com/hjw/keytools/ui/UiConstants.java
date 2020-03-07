@@ -19,10 +19,11 @@ public class UiConstants {
     public static final String COPY_SUCCESS_MESSAGE = "复制成功";
     public static final String JTEXTFILED_NOT_NULL="像素输入框及图片保存路径不能为空";
     public static final String TERMINAL_HINT = "<Terminal> KeyTool ";
+    public static final String HINT_TEXT = "在此处输入json字符串或者xml字符串...";
 
     public static final String GAODE_MAP_KEY = "0f06a966f194c8f185cbcec77228286f";
 
     //,"爬虫关键数据"
     public static final String[] FUN_NAME = new String[]
-            { "像素图片生成器", "时间戳-时间转换","二维码生成器", "高德地图路径规划", "json格式化","取色器加强版","个人资料认证","快捷截图"};
+            { "像素图片生成器", "时间戳-时间转换","二维码生成器", "json格式化","个人资料认证","取色器加强版","高德地图路径规划"};
 }

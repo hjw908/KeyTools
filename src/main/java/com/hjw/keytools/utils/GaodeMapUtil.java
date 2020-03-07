@@ -71,14 +71,14 @@ public class GaodeMapUtil {
     }
 
     public static void main(String[] args) {
-//        GaodeMapUtil.byAddressGetGPS("深圳市福田区侨香路国华大厦"); //114.011284,22.547225
-//        GaodeMapUtil.byAddressGetGPS("深圳市南山区龙海家园"); //113.904440,22.530267
+        GaodeMapUtil.byAddressGetLocation("深圳市福田区侨香路国华大厦"); //114.011284,22.547225
+//        GaodeMapUtil.byAddressGetLocation("深圳市南山区龙海家园"); //113.904440,22.530267
         double[] location = {114.011284,22.547225};
         double[] location2 = {113.904440,22.530267};
 //        String locationStr = location[0] + "," +location[1];
 //        System.out.println(locationStr);
 //        GaodeMapUtil.byGPSGetAddress(location);
 
-        GaodeMapUtil.directionPlanning(location,location2);
+//        GaodeMapUtil.directionPlanning(location,location2);
     }
 }

@@ -29,13 +29,6 @@ public class PixelHttpClientUtil {
 
     public static CloseableHttpResponse response;
 
-
-
-
-
-
-
-
     public static InputStream httpclientGet(String url) throws IOException {
         InputStream inputStream = null;
         //创建默认的客户端
