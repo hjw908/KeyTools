@@ -14,7 +14,7 @@ import java.util.logging.XMLFormatter;
 public class JSONFormatUtil {
     public static String jsonFormat(String tempJsonStr) {
         String jsonString = "";
-        if (!tempJsonStr.equals(UiConstants.HINT_TEXT)) {
+        if (!tempJsonStr.equals(UiConstants.HINT_JSON_TEXT)) {
 
             JSONObject jsonObj = JSONObject.parseObject(tempJsonStr);
             jsonString = JSONObject.toJSONString(jsonObj,

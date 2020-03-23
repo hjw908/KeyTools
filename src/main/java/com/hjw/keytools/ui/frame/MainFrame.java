@@ -30,6 +30,8 @@ public class MainFrame extends JFrame {
     JPanel jsonformatContentPanel;
     PersonInfoPanel personInfoPanel;
     JPanel personInfoContentPanel;
+    EncryptionJpanel encryptionJpanel;
+    JPanel encryptionContentPanel;
 
     public MainFrame() throws Exception {
         super();
@@ -43,7 +45,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("keyTools");
         setIconImage(new ImageIcon(MainFrame.class.getResource("/keytool_icon.png")).getImage());
-        setSize(new Dimension(1110, 600));//675
+        setSize(new Dimension(1100, 602));//675
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -97,6 +99,10 @@ public class MainFrame extends JFrame {
                     }
 
                     case UiConstants.FUN_5: {
+                        contentJpanel.removeAll();
+                        contentJpanel.add(encryptionContentPanel);
+                        repaint();
+                        revalidate();
                         break;
                     }
 
@@ -137,6 +143,10 @@ public class MainFrame extends JFrame {
 
         personInfoPanel = PersonInfoPanel.getInstance(this);
         personInfoContentPanel = personInfoPanel.getPersonInfoContentPanel();
+
+        encryptionJpanel = EncryptionJpanel.getInstance(this);
+        encryptionContentPanel = encryptionJpanel.getEncryptionPanel();
+
 
         //首次运行程序的时候，contentPanel默认展示第一个list的内容
         if (jList.getSelectedIndex() == 0) {

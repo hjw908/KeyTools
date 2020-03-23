@@ -44,6 +44,8 @@ public class QRCodeUtil {
         byte[] byteData = null;
         try {
             BitMatrix bitMatrix = qrCodeWriter.encode(text,BarcodeFormat.QR_CODE,width,height);
+
+
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix,"PNG",byteArrayOutputStream);//二维码数据都放到byteArrayOutputStream里了
             byteData = byteArrayOutputStream.toByteArray();

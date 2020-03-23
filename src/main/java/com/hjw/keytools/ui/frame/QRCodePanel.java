@@ -10,6 +10,7 @@ import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 
 public class QRCodePanel {
     private static QRCodePanel qrCodePanel;
@@ -136,25 +137,40 @@ public class QRCodePanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String text = inputJTextArea.getText();
+                    String textCorrect = "";
+                    try {
+                        textCorrect = new String(text.getBytes("UTF-8"),"ISO-8859-1");//zxing开源库进行二维码的识别，一开始被不能识别中文,如果不想更改源码，则将字符串转换成ISO-8859-1编码
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    }
                     if (!text.equals("") && picPathField.getText().equals("")) {
 
-                        byte[] qrByte = QRCodeUtil.generateImage(text, 250, 250);
+                        byte[] qrByte = new byte[0];
+
+
+                        qrByte = QRCodeUtil.generateImage(textCorrect, 250, 250);
+
+
                         showQrCodeOnJpanel(qrByte);
-                    }else if(!text.equals("") && !picPathField.getText().equals("")){
+                    } else if (!text.equals("") && !picPathField.getText().equals("")) {
                         String filePath = picPathField.getText();
 
-                        byte[] qrByte = QRCodeUtil.saveQrcodeImage(mainFrame,text,250,250,filePath,suffix);
+                        byte[] qrByte = QRCodeUtil.saveQrcodeImage(mainFrame, text, 250, 250, filePath, suffix);
                         showQrCodeOnJpanel(qrByte);
-                    }else if(text.equals("")){
-                        JOptionPane.showMessageDialog(mainFrame,"文本内容不能为空", UiConstants.MESSAGE_TITLE,JOptionPane.INFORMATION_MESSAGE);
+                    } else if (text.equals("")) {
+                        JOptionPane.showMessageDialog(mainFrame, "文本内容不能为空", UiConstants.MESSAGE_TITLE, JOptionPane.INFORMATION_MESSAGE);
+
+
                     }
+
                 }
             });
+
 
         }
     }
 
-    public void showQrCodeOnJpanel(byte[] qrByte){
+    public void showQrCodeOnJpanel(byte[] qrByte) {
         outputJTextArea.setOpaque(false);
         ImageIcon imageIcon = new ImageIcon(qrByte);
         JLabel qrPicLabel = new JLabel(imageIcon);

@@ -79,17 +79,17 @@ public class JSONFormatJPanel {
         operatorJpanel.add(secondeJpanel);
 
         JPanel sourceJpanel = new JPanel();
-        sourceTextArea = new JTextArea(27, 45);
+        sourceTextArea = new JTextArea(27, 40);
         Border sourcetitleBorder = BorderFactory.createTitledBorder("SourceText");
         Border sourcelowerBorder = BorderFactory.createLoweredBevelBorder();
-        sourceTextArea.setBorder(BorderFactory.createCompoundBorder(sourcetitleBorder, sourcelowerBorder));
-        sourceTextArea.addFocusListener(new JTextAreaHintListener(sourceTextArea, UiConstants.HINT_TEXT));
+        sourceJpanel.setBorder(BorderFactory.createCompoundBorder(sourcetitleBorder, sourcelowerBorder));
+        sourceTextArea.addFocusListener(new JTextAreaHintListener(sourceTextArea, UiConstants.HINT_JSON_TEXT));
 
         JScrollPane sourceJscrollPane = new JScrollPane(sourceTextArea);
         sourceJpanel.add(sourceJscrollPane);
 
         JPanel targetJpanel = new JPanel();
-        targetTextArea = new JTextArea(27, 45);
+        targetTextArea = new JTextArea(27, 40);
         Border targettitleBorder = BorderFactory.createTitledBorder("TargetText");
         Border targetlowerBorder = BorderFactory.createLoweredBevelBorder();
         targetJpanel.setBorder(BorderFactory.createCompoundBorder(targettitleBorder, targetlowerBorder));
@@ -166,7 +166,7 @@ public class JSONFormatJPanel {
         clearBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sourceTextArea.setText(UiConstants.HINT_TEXT);
+                sourceTextArea.setText(UiConstants.HINT_JSON_TEXT);
                 sourceTextArea.setForeground(Color.GRAY);
                 targetTextArea.setText("");
                 objNumLabel.setText("");
